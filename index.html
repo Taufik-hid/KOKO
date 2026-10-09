@@ -8,17 +8,19 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   :root { --rose:#b4567d; --gold:#c9a24b; --cream:#fdf8f3; }
+  html { scroll-behavior:smooth; }
   body {
     font-family:'Playfair Display', Georgia, serif;
     background: linear-gradient(150deg, #2b1220, #4a1f38 45%, #7b3a5e);
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    overflow:hidden; position:relative;
+    background-attachment: fixed;
+    min-height:100vh; min-height:100dvh; display:flex; align-items:center; justify-content:center;
+    overflow-x:hidden; overflow-y:auto; position:relative; padding:10px 0;
   }
-  .glow { position:fixed; border-radius:50%; filter:blur(90px); opacity:.5; pointer-events:none; }
+  .glow { position:fixed; border-radius:50%; filter:blur(90px); opacity:.5; pointer-events:none; z-index:0; }
   .glow.g1 { width:340px; height:340px; background:#c76b8e; top:-80px; left:-80px; animation:drift 14s ease-in-out infinite alternate; }
   .glow.g2 { width:300px; height:300px; background:#c9a24b; bottom:-90px; right:-70px; animation:drift 18s ease-in-out infinite alternate-reverse; }
   @keyframes drift { from{transform:translate(0,0)} to{transform:translate(50px,30px)} }
-  .petal { position:fixed; top:-6%; pointer-events:none; opacity:0; animation:fall linear infinite; }
+  .petal { position:fixed; top:-6%; pointer-events:none; opacity:0; z-index:0; animation:fall linear infinite; }
   @keyframes fall {
     0%   { transform:translateY(-10vh) rotate(0deg); opacity:.85; }
     100% { transform:translateY(110vh) rotate(340deg); opacity:.15; }
@@ -168,6 +170,7 @@ function go(n){ stopMusic(n);
   document.getElementById('s'+n).classList.add('active');
   for(let i=0;i<=4;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
   if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
+  window.scrollTo({top:0, behavior:'smooth'}); /* balik ke atas saat ganti slide */
   if(n===4){ confetti(); }
 }
 /* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
