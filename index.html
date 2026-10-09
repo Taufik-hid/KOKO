@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wedding Wish 💐</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root { --rose:#b4567d; --gold:#c9a24b; --cream:#fdf8f3; }
+  body {
+    font-family:'Playfair Display', Georgia, serif;
+    background: linear-gradient(150deg, #2b1220, #4a1f38 45%, #7b3a5e);
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    overflow:hidden; position:relative;
+  }
+  .glow { position:fixed; border-radius:50%; filter:blur(90px); opacity:.5; pointer-events:none; }
+  .glow.g1 { width:340px; height:340px; background:#c76b8e; top:-80px; left:-80px; animation:drift 14s ease-in-out infinite alternate; }
+  .glow.g2 { width:300px; height:300px; background:#c9a24b; bottom:-90px; right:-70px; animation:drift 18s ease-in-out infinite alternate-reverse; }
+  @keyframes drift { from{transform:translate(0,0)} to{transform:translate(50px,30px)} }
+  .petal { position:fixed; top:-6%; pointer-events:none; opacity:0; animation:fall linear infinite; }
+  @keyframes fall {
+    0%   { transform:translateY(-10vh) rotate(0deg); opacity:.85; }
+    100% { transform:translateY(110vh) rotate(340deg); opacity:.15; }
+  }
+  .card {
+    position:relative; z-index:2;
+    background: rgba(255,253,250,.95);
+    border:1px solid rgba(201,162,75,.45);
+    border-radius:24px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 #fff;
+    width:100%; max-width:390px; margin:18px;
+    padding:34px 26px 24px; text-align:center; overflow:hidden;
+  }
+  .card::before { content:"❦"; position:absolute; top:10px; left:14px; color:var(--gold); opacity:.6; font-size:18px; }
+  .card::after  { content:"❦"; position:absolute; top:10px; right:14px; color:var(--gold); opacity:.6; font-size:18px; }
+  .script { font-family:'Great Vibes', cursive; font-size:2rem; color:var(--rose); line-height:1.2; }
+  .divider { width:70px; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:12px auto 14px; }
+  .msg { color:#6b4a5a; line-height:1.7; font-size:.98rem; white-space:pre-line; }
+  .frame { border-radius:16px; overflow:hidden; margin:18px 0 6px; position:relative;
+           box-shadow:0 8px 24px rgba(92,46,70,.25); }
+  .frame::after { content:""; position:absolute; inset:6px; border:1px solid rgba(255,255,255,.65);
+                  border-radius:12px; pointer-events:none; }
+  .frame img { width:100%; display:block; max-height:320px; object-fit:cover; }
+  .btn {
+    display:inline-block; margin-top:18px; padding:12px 38px; border:none; border-radius:999px;
+    background:linear-gradient(135deg,#b4567d,#8a3a5f); color:#fff; font-family:inherit;
+    font-size:1rem; letter-spacing:.5px; cursor:pointer; position:relative; overflow:hidden;
+    box-shadow:0 6px 18px rgba(138,58,95,.4); transition:transform .15s ease, box-shadow .3s;
+  }
+  .btn:hover { box-shadow:0 8px 24px rgba(138,58,95,.55); }
+  .btn:active { transform:scale(.96); }
+  .btn::after {
+    content:""; position:absolute; top:0; left:-60%; width:40%; height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.5),transparent);
+    animation:shine 3.2s ease-in-out infinite;
+  }
+  @keyframes shine { 0%,60%{left:-60%} 90%,100%{left:130%} }
+  .dots { margin-top:16px; display:flex; gap:7px; justify-content:center; }
+  .dot { width:7px; height:7px; border-radius:50%; background:#e0c9d4; transition:.3s; }
+  .dot.on { background:var(--rose); width:20px; border-radius:5px; }
+  .slide { display:none; }
+  .slide.active { display:block; }
+  .slide.active > * { animation:up .55s ease both; }
+  .slide.active > *:nth-child(2){ animation-delay:.12s }
+  .slide.active > *:nth-child(3){ animation-delay:.22s }
+  .slide.active > *:nth-child(4){ animation-delay:.3s }
+  @keyframes up { from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none} }
+  #popup { display:none; position:fixed; inset:0; background:rgba(30,10,22,.66);
+           backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:20; }
+  #popup .box {
+    background:var(--cream); border:1px solid rgba(201,162,75,.5); border-radius:20px;
+    padding:30px 24px; width:86%; max-width:330px; text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,.5); animation:pop .3s cubic-bezier(.2,1.4,.4,1);
+  }
+  @keyframes pop { from{transform:scale(.85); opacity:0} to{transform:scale(1); opacity:1} }
+  #popup input {
+    width:100%; padding:13px; margin:16px 0 6px; border:1px solid #d8b9c8; border-radius:12px;
+    text-align:center; font-size:1.05rem; font-family:inherit; letter-spacing:2px; outline:none;
+    background:#fff; transition:border .2s, box-shadow .2s;
+  }
+  #popup input:focus { border-color:var(--rose); box-shadow:0 0 0 3px rgba(180,86,125,.15); }
+  #popup.shake .box { animation:shake .4s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-9px)} 75%{transform:translateX(9px)} }
+  .err { color:#b03030; font-size:.85rem; min-height:1.3em; }
+  .lock { font-size:2rem; display:inline-block; animation:sway 2.4s ease-in-out infinite; }
+  @keyframes sway { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+  audio { display:none; }
+  .hint { font-size:.78rem; color:#b08fa0; margin-top:8px; font-style:italic; }
+</style>
+</head>
+<body>
+
+<div class="glow g1"></div><div class="glow g2"></div>
+
+<div class="card">
+  <!-- SLIDE 0 — pembuka, kata-kata saja -->
+  <div class="slide active" id="s0">
+    <h2 class="script">Sebelum<br>Mulai...</h2>
+    <div class="divider"></div>
+    <p class="msg">Siapno HP Disek, Ojok Lali Direcord 📷</p>
+    <button class="btn" onclick="go(1)">Mulai ➜</button>
+  </div>
+
+  <!-- SLIDE 1 -->
+  <div class="slide" id="s1">
+    <h2 class="script">Ciye Nurut Wkwkwk 🤣</h2>
+    <div class="divider"></div>
+    <p class="msg">Senyum Sek Coba <b>Cheese</b> 🎥</p>
+    <div class="frame"><img src="foto.jpg" alt="foto"></div>
+    <button class="btn" onclick="go(2)">Next ➜</button>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide" id="s2">
+    <h2 class="script">Selamat Menempuh Hidup Baru Bolo</h2>
+    <div class="divider"></div>
+    <p class="msg">Semoga pernikahan kalian dipenuhi kebahagiaan,
+keharmonisan, dan keberkahan selamanya.
+Semoga menjadi keluarga yang <i>sakinah, mawaddah, warahmah</i>. 💍
+Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
+    <div class="frame"><img src="foto2.jpg" alt="foto"></div>
+    <audio id="bgm" src="music.mp3" loop></audio>
+    <button class="btn" onclick="go(3)">Next ➜</button>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide" id="s3">
+    <h2 class="script">Arep Bansos Gk?</h2>
+    <div class="divider"></div>
+    <p class="msg"><b>Lek Arep Bansos Teko Wong Ganteng, Langsung Next ae</b> 🎁</p>
+    <div class="frame"><img src="foto3.jpg" alt="foto"></div>
+    <button class="btn" onclick="openPopup()">Next ➜</button>
+  </div>
+
+  <!-- SLIDE 4 (terkunci) -->
+  <div class="slide" id="s4">
+    <h2 class="script">Selamat 🎉</h2>
+    <div class="divider"></div>
+    <p class="msg">Scan barcode di bawah<br>untuk <b>menerima bansos</b> 😄</p>
+    <div class="frame"><img src="foto4.jpg" alt="barcode"></div>
+    <p class="hint">Sedikit Lagi Untuk Menerima Bansos 😉</p>
+  </div>
+
+  <div class="dots">
+    <span class="dot on" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span>
+    <span class="dot" id="d3"></span><span class="dot" id="d4"></span>
+  </div>
+</div>
+
+<!-- POPUP PASSWORD -->
+<div id="popup">
+  <div class="box">
+    <span class="lock">🔒</span>
+    <h2 style="font-family:'Great Vibes',cursive; font-size:1.6rem; color:var(--rose);">Kado Terkunci</h2>
+    <p style="color:#8a6b7b; font-size:.9rem;">Password e Onok Ndk Amplop</p>
+    <input type="password" id="pw" placeholder="• • • • • •" autocomplete="off">
+    <div class="err" id="err"></div>
+    <button class="btn" onclick="checkPw()">Buka 🔓</button>
+  </div>
+</div>
+
+<script>
+/* Password TIDAK tersimpan di file ini — hanya SHA-256 hash-nya. */
+const HASH = "eadbc55dc04731760fdcda3f88f8361cac54cc901e8c745e585b42a93b16cdb3";
+function go(n){ stopMusic(n);
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  for(let i=0;i<=4;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
+  if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
+  if(n===4){ confetti(); }
+}
+/* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
+function stopMusic(n){ /* musik tidak pernah dihentikan — terus jalan semua slide */ }
+function openPopup(){ document.getElementById('popup').style.display='flex';
+  setTimeout(()=>document.getElementById('pw').focus(),60); }
+function closePopup(){ document.getElementById('popup').style.display='none'; }
+async function sha256(t){ const b=await crypto.subtle.digest('SHA-256',
+  new TextEncoder().encode(t)); return [...new Uint8Array(b)]
+  .map(x=>x.toString(16).padStart(2,'0')).join(''); }
+async function checkPw(){
+  const p=document.getElementById('popup');
+  const v=document.getElementById('pw').value.trim().toUpperCase().replace(/\s+/g,' ');
+  if(await sha256(v)===HASH){ closePopup(); go(4); }
+  else {
+    document.getElementById('err').textContent='❌ Password salah, coba lagi';
+    p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake');
+  }
+}
+document.getElementById('pw').addEventListener('keydown',e=>{
+  if(e.key==='Enter') checkPw(); });
+document.getElementById('popup').addEventListener('click',e=>{
+  if(e.target.id==='popup') closePopup(); });
+/* kelopak bunga jatuh */
+const petals=['🌸','💗','✨','🌹','🤍'];
+for(let i=0;i<14;i++){
+  const s=document.createElement('span'); s.className='petal';
+  s.textContent=petals[i%petals.length];
+  s.style.left=Math.random()*100+'vw';
+  s.style.animationDuration=(9+Math.random()*9)+'s';
+  s.style.animationDelay=(Math.random()*10)+'s';
+  s.style.fontSize=(14+Math.random()*14)+'px';
+  document.body.appendChild(s);
+}
+/* confetti saat slide terakhir terbuka */
+function confetti(){
+  const emoji=['🎉','🎊','✨','💛','🥳'];
+  for(let i=0;i<26;i++){
+    const c=document.createElement('span'); c.textContent=emoji[i%emoji.length];
+    c.style.cssText='position:fixed;z-index:15;pointer-events:none;font-size:'+(16+Math.random()*18)+'px;left:'+(Math.random()*100)+'vw;top:-8vh;transition:transform 3s ease-in, opacity 3s;';
+    document.body.appendChild(c);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      c.style.transform='translateY(115vh) rotate('+(Math.random()*720-360)+'deg)';
+      c.style.opacity='0';
+    }));
+    setTimeout(()=>c.remove(),3200);
+  }
+}
+</script>
+</body>
+</html>
