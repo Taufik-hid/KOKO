@@ -126,17 +126,26 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
     <button class="btn" onclick="go(3)">Next ➜</button>
   </div>
 
-  <!-- SLIDE 3 -->
+  <!-- SLIDE 3 — doa -->
   <div class="slide" id="s3">
+    <h2 class="script">Satu Doa 🤲</h2>
+    <div class="divider"></div>
+    <p class="msg">Doakan semoga pasangan ini<br><b>berjodoh juga</b> 💫</p>
+    <div class="frame"><img src="foto5.jpg" alt="foto"></div>
+    <button class="btn" onclick="go(4)">Next ➜</button>
+  </div>
+
+  <!-- SLIDE 4 (bansos) -->
+  <div class="slide" id="s4">
     <h2 class="script">Arep Bansos Gk?</h2>
     <div class="divider"></div>
     <p class="msg"><b>Lek Arep Bansos Teko Wong Ganteng, Langsung Next ae</b> 🎁</p>
-    <div class="frame"><img src="foto3.JPG" alt="foto"></div>
+    <div class="frame"><img src="foto3.jpg" alt="foto"></div>
     <button class="btn" onclick="openPopup()">Next ➜</button>
   </div>
 
   <!-- SLIDE 4 (terkunci) -->
-  <div class="slide" id="s4">
+  <div class="slide" id="s5">
     <h2 class="script">Selamat 🎉</h2>
     <div class="divider"></div>
     <p class="msg">Scan barcode di bawah<br>untuk <b>menerima bansos</b> 😄</p>
@@ -146,7 +155,7 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
 
   <div class="dots">
     <span class="dot on" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span>
-    <span class="dot" id="d3"></span><span class="dot" id="d4"></span>
+    <span class="dot" id="d3"></span><span class="dot" id="d4"></span><span class="dot" id="d5"></span>
   </div>
 </div>
 
@@ -168,10 +177,10 @@ const HASH = "eadbc55dc04731760fdcda3f88f8361cac54cc901e8c745e585b42a93b16cdb3";
 function go(n){ stopMusic(n);
   document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
   document.getElementById('s'+n).classList.add('active');
-  for(let i=0;i<=4;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
+  for(let i=0;i<=5;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
   if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
   window.scrollTo({top:0, behavior:'smooth'}); /* balik ke atas saat ganti slide */
-  if(n===4){ confetti(); }
+  if(n===5){ confetti(); }
 }
 /* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
 function stopMusic(n){ /* musik tidak pernah dihentikan — terus jalan semua slide */ }
@@ -184,7 +193,7 @@ async function sha256(t){ const b=await crypto.subtle.digest('SHA-256',
 async function checkPw(){
   const p=document.getElementById('popup');
   const v=document.getElementById('pw').value.trim().toUpperCase().replace(/\s+/g,' ');
-  if(await sha256(v)===HASH){ closePopup(); go(4); }
+  if(await sha256(v)===HASH){ closePopup(); go(5); }
   else {
     document.getElementById('err').textContent='❌ Password salah, coba lagi';
     p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake');
