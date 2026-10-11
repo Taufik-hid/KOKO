@@ -309,9 +309,9 @@ function startGifts(){
     const W = window.innerWidth, H = window.innerHeight;
     let x = 20 + Math.random()*(W-100);
     let y = 60 + Math.random()*(H-160);
-    const speed = (1.05 + Math.random()*0.75) * Math.min(W,700)/390;  // skala layar
-    let vx = (Math.random()*2.0+1.0) * (Math.random()<.5?-1:1) * speed;
-    let vy = (Math.random()*2.0+1.0) * (Math.random()<.5?-1:1) * speed;
+    const speed = (1.5 + Math.random()*0.9) * Math.min(W,700)/390;  // skala layar
+    let vx = (Math.random()*3.0+1.8) * (Math.random()<.5?-1:1) * speed;
+    let vy = (Math.random()*3.0+1.8) * (Math.random()<.5?-1:1) * speed;
     g.style.left = x+'px'; g.style.top = y+'px';
     g.addEventListener('click', () => catchGift(g), { once:false });
     arena.appendChild(g);
