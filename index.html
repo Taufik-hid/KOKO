@@ -90,17 +90,25 @@
   audio { display:none; }
 
   /* ---- slide tangkap kado ---- */
-  .gift-arena { position:relative; height:240px; margin:16px 0 4px; border-radius:14px;
-                background:linear-gradient(180deg,#faf0f5,#f3e3ec); overflow:hidden;
-                border:1px solid rgba(201,162,75,.35); }
+  .gift-arena { position:fixed; inset:0; z-index:12; overflow:hidden; pointer-events:auto; }
   .gift { position:absolute; font-size:2.1rem; cursor:pointer; user-select:none;
           padding:8px; line-height:1; will-change:transform; z-index:3; }
   .gift.pulse { animation:gpulse 1.2s ease-in-out infinite; }
   @keyframes gpulse { 0%,100%{ filter:brightness(1) } 50%{ filter:brightness(1.35) drop-shadow(0 0 8px rgba(201,162,75,.8)) } }
   .gift.pop { animation:gpop .35s ease forwards; pointer-events:none; }
   @keyframes gpop { to { transform:scale(2.2); opacity:0; } }
-  .gift-count { font-size:.95rem; color:var(--rose); font-weight:700; letter-spacing:.5px; }
-  .gift-done-note { font-size:.85rem; color:#8a6b7b; min-height:1.3em; margin-top:6px; font-style:italic; }
+  .gift-count { position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:14;
+                background:rgba(255,253,250,.92); border:1px solid rgba(201,162,75,.5);
+                padding:8px 18px; border-radius:999px; font-size:.95rem; color:var(--rose);
+                font-weight:700; letter-spacing:.5px; box-shadow:0 6px 18px rgba(0,0,0,.25); }
+  .gift-done-note { position:fixed; top:58px; left:50%; transform:translateX(-50%); z-index:14;
+                font-size:.9rem; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.6);
+                font-style:italic; white-space:nowrap; }
+
+  /* ---- popup konfirmasi berantai ---- */
+  .ask-choices { display:flex; gap:10px; justify-content:center; margin-top:16px; }
+  .ask-choices .btn { margin-top:0; padding:10px 30px; }
+  .btn.no { background:linear-gradient(135deg,#8a8f98,#6b7078); box-shadow:0 6px 18px rgba(80,84,92,.35); }
   .hint { font-size:.78rem; color:#b08fa0; margin-top:8px; font-style:italic; }
 </style>
 </head>
@@ -114,7 +122,7 @@
     <h2 class="script">Sebelum<br>Mulai...</h2>
     <div class="divider"></div>
     <p class="msg">Siapno HP Disek, Ojok Lali Direcord 📷</p>
-    <button class="btn" onclick="go(1)">Mulai ➜</button>
+    <button class="btn" onclick="startAsk()">Mulai ➜</button>
   </div>
 
   <!-- SLIDE 1 -->
@@ -157,15 +165,14 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
     <button class="btn" onclick="openPopup()">Next ➜</button>
   </div>
 
-  <!-- SLIDE 5 — tangkap kado -->
+  <!-- SLIDE 5 — tangkap kado (arena fullscreen overlay) -->
   <div class="slide" id="s5">
     <h2 class="script">Satu Langkah Lagi…</h2>
     <div class="divider"></div>
-    <p class="msg"><b>Tangkap semua kadonya!</b> 🎁</p>
-    <div class="gift-arena" id="arena"></div>
-    <p class="gift-count" id="gcount">🎁 0 / 5</p>
-    <p class="gift-done-note" id="gnote"></p>
+    <p class="msg"><b>Tangkap semua kadonya!</b> 🎁<br>
+    <span style="font-size:.85rem; color:#8a6b7b;">Kado lari-lari di layar — kejar & ketuk!</span></p>
   </div>
+  <div class="gift-arena" id="arena" style="display:none;"></div>
 
   <!-- SLIDE 6 (terkunci/barcode) -->
   <div class="slide" id="s6">
@@ -179,6 +186,19 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
   <div class="dots">
     <span class="dot on" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span>
     <span class="dot" id="d3"></span><span class="dot" id="d4"></span><span class="dot" id="d5"></span><span class="dot" id="d6"></span>
+  </div>
+</div>
+
+
+<!-- POPUP KONFIRMASI (slide 0) -->
+<div id="askPopup" style="display:none; position:fixed; inset:0; background:rgba(30,10,22,.66); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:25;">
+  <div class="box" style="background:var(--cream); border:1px solid rgba(201,162,75,.5); border-radius:20px; padding:30px 24px; width:86%; max-width:330px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.5); animation:pop .3s cubic-bezier(.2,1.4,.4,1);">
+    <span class="lock">🤨</span>
+    <h2 style="font-family:'Great Vibes',cursive; font-size:1.5rem; color:var(--rose);" id="askText">Wes disiapno rung HP ne?</h2>
+    <div class="ask-choices">
+      <button class="btn" onclick="askAnswer(true)">Ya</button>
+      <button class="btn no" onclick="askAnswer(false)">Belum</button>
+    </div>
   </div>
 </div>
 
@@ -203,7 +223,8 @@ function go(n){ stopMusic(n);
   for(let i=0;i<=6;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
   if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
   window.scrollTo({top:0, behavior:'smooth'}); /* balik ke atas saat ganti slide */
-  if(n===5){ startGifts(); }
+  if(n===5){ document.querySelector('.card').style.visibility='hidden'; startGifts(); }
+  else { document.querySelector('.card').style.visibility='visible'; }
   if(n===6){ confetti(); }
 }
 /* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
@@ -228,57 +249,93 @@ document.getElementById('pw').addEventListener('keydown',e=>{
 document.getElementById('popup').addEventListener('click',e=>{
   if(e.target.id==='popup') closePopup(); });
 
-/* ---------- tangkap kado ---------- */
+
+/* ---------- popup konfirmasi berantai (slide 0) ---------- */
+const ASK_STEPS = [
+  "Wes disiapno rung HP ne?",
+  "Tenan wes disiapno?",
+  "Wes di record?"
+];
+let askStep = 0;
+function startAsk(){ askStep = 0; showAsk(); }
+function showAsk(){
+  document.getElementById('askText').textContent = ASK_STEPS[askStep];
+  document.getElementById('askPopup').style.display = 'flex';
+}
+function askAnswer(yes){
+  if(!yes){
+    // belum → tutup popup & tetap di slide 0 (bisa klik Mulai lagi)
+    document.getElementById('askPopup').style.display = 'none';
+    return;
+  }
+  askStep++;
+  if(askStep < ASK_STEPS.length){ showAsk(); }
+  else { document.getElementById('askPopup').style.display = 'none'; go(1); }
+}
+document.getElementById('askPopup').addEventListener('click', e=>{
+  if(e.target.id==='askPopup'){ /* klik luar = batal */ e.target.style.display='none'; }
+});
+
+/* ---------- tangkap kado (fullscreen) ---------- */
 const GIFT_TOTAL = 5;
 let giftsStarted = false;
-const giftEmojis = ['🎁','🪅','🎀','💝','🛍️'];
+let caughtCount = 0;
 function startGifts(){
   if(giftsStarted){ return; }
   giftsStarted = true;
+  caughtCount = 0;
   const arena = document.getElementById('arena');
+  arena.style.display = 'block';
   arena.innerHTML = '';
   document.getElementById('gcount').textContent = '🎁 0 / ' + GIFT_TOTAL;
   document.getElementById('gnote').textContent = '';
   for(let i=0;i<GIFT_TOTAL;i++){
     const g = document.createElement('span');
     g.className = 'gift pulse';
-    g.textContent = giftEmojis[i % giftEmojis.length];
-    const W = arena.clientWidth, H = arena.clientHeight;
-    let x = 10 + Math.random()*(W-70);
-    let y = 10 + Math.random()*(H-70);
-    const speed = 0.85 + Math.random()*0.5;
-    let vx = (Math.random()*1.6+0.7) * (Math.random()<.5?-1:1) * speed;
-    let vy = (Math.random()*1.6+0.7) * (Math.random()<.5?-1:1) * speed;
+    g.textContent = '🎁';
+    g.style.fontSize = (30 + Math.random()*14) + 'px';
+    const W = window.innerWidth, H = window.innerHeight;
+    let x = 20 + Math.random()*(W-100);
+    let y = 60 + Math.random()*(H-160);
+    const speed = (0.9 + Math.random()*0.7) * Math.min(W,700)/390;  // skala layar
+    let vx = (Math.random()*1.6+0.8) * (Math.random()<.5?-1:1) * speed;
+    let vy = (Math.random()*1.6+0.8) * (Math.random()<.5?-1:1) * speed;
     g.style.left = x+'px'; g.style.top = y+'px';
-    g.addEventListener('click', () => catchGift(g));
+    g.addEventListener('click', () => catchGift(g), { once:false });
     arena.appendChild(g);
     (function move(){
-      if(g.classList.contains('pop') || !g.isConnected) return;
-      const W2 = arena.clientWidth, H2 = arena.clientHeight;
+      if(!g.isConnected) return;
+      const W2 = window.innerWidth, H2 = window.innerHeight;
+      const w = g.offsetWidth || 46;
       x += vx; y += vy;
       if(x <= 0){ x = 0; vx = -vx; }
       if(y <= 0){ y = 0; vy = -vy; }
-      if(x >= W2-52){ x = W2-52; vx = -vx; }
-      if(y >= H2-52){ y = H2-52; vy = -vy; }
+      if(x >= W2-w){ x = W2-w; vx = -vx; }
+      if(y >= H2-w){ y = H2-w; vy = -vy; }
       g.style.left = x+'px'; g.style.top = y+'px';
       requestAnimationFrame(move);
     })();
   }
 }
 function catchGift(g){
-  if(g.classList.contains('pop')) return;
+  if(g.dataset.caught) return;      // anti dobel hitung
+  g.dataset.caught = '1';
   g.classList.remove('pulse');
   g.classList.add('pop');
   setTimeout(()=>g.remove(), 350);
-  const caught = document.querySelectorAll('.gift.pop').length;
-  document.getElementById('gcount').textContent = '🎁 ' + caught + ' / ' + GIFT_TOTAL;
+  caughtCount++;
+  document.getElementById('gcount').textContent = '🎁 ' + caughtCount + ' / ' + GIFT_TOTAL;
   const note = document.getElementById('gnote');
-  if(caught < GIFT_TOTAL){
-    note.textContent = caught === 1 ? 'Satu ditangkap! Lanjut…' : caught + ' kado ditangkap, sisa ' + (GIFT_TOTAL-caught) + ' lagi!';
+  if(caughtCount < GIFT_TOTAL){
+    note.textContent = caughtCount === 1 ? 'Satu ditangkap! Lanjut…' : caughtCount + ' kado ditangkap, sisa ' + (GIFT_TOTAL-caughtCount) + ' lagi!';
   } else {
     document.getElementById('gcount').textContent = '🎁 ' + GIFT_TOTAL + ' / ' + GIFT_TOTAL + ' ✅';
     note.textContent = 'Semua kado tertangkap! Membuka hadiah…';
-    setTimeout(()=>{ giftsStarted = false; go(6); }, 900);
+    setTimeout(()=>{
+      document.getElementById('arena').style.display = 'none';
+      giftsStarted = false;
+      go(6);
+    }, 900);
   }
 }
 
