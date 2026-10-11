@@ -94,17 +94,18 @@
                 background:linear-gradient(150deg,#2b1220,#4a1f38 45%,#7b3a5e); }
   body.gift-mode .card { visibility:hidden; }
   body.gift-mode .petal, body.gift-mode .glow { display:none; }
+  .gift-title { position:fixed; top:52px; left:0; right:0; text-align:center; z-index:35; pointer-events:none; }
   .gift { position:absolute; font-size:2.1rem; cursor:pointer; user-select:none;
           padding:8px; line-height:1; will-change:transform; z-index:3; }
   .gift.pulse { animation:gpulse 1.2s ease-in-out infinite; }
   @keyframes gpulse { 0%,100%{ filter:brightness(1) } 50%{ filter:brightness(1.35) drop-shadow(0 0 8px rgba(201,162,75,.8)) } }
   .gift.pop { animation:gpop .35s ease forwards; pointer-events:none; }
   @keyframes gpop { to { transform:scale(2.2); opacity:0; } }
-  .gift-count { position:fixed; top:14px; left:50%; transform:translateX(-50%); z-index:40;
+  .gift-count { position:fixed; top:150px; left:50%; transform:translateX(-50%); z-index:40;
                 background:rgba(255,253,250,.92); border:1px solid rgba(201,162,75,.5);
                 padding:8px 18px; border-radius:999px; font-size:.95rem; color:var(--rose);
                 font-weight:700; letter-spacing:.5px; box-shadow:0 6px 18px rgba(0,0,0,.25); }
-  .gift-done-note { position:fixed; top:58px; left:50%; transform:translateX(-50%); z-index:40;
+  .gift-done-note { position:fixed; top:196px; left:50%; transform:translateX(-50%); z-index:40;
                 font-size:.9rem; color:#fff; text-shadow:0 1px 6px rgba(0,0,0,.6);
                 font-style:italic; white-space:nowrap; }
 
@@ -172,8 +173,7 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
   <div class="slide" id="s5">
     <h2 class="script">Satu Langkah Lagi…</h2>
     <div class="divider"></div>
-    <p class="msg"><b>Tangkap semua kadonya!</b> 🎁<br>
-    <span style="font-size:.85rem; color:#8a6b7b;">Kado lari-lari di layar — kejar & ketuk!</span></p>
+    <p class="msg"><b>Tangkap semua kadonya!</b> 🎁</p>
   </div>
 
   <!-- SLIDE 6 (terkunci/barcode) -->
@@ -191,7 +191,12 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
   </div>
 </div>
 
-<div class="gift-arena" id="arena" style="display:none;"></div>
+<div class="gift-arena" id="arena" style="display:none;">
+  <div class="gift-title">
+    <h2 class="script" style="font-size:2rem; margin-bottom:4px;">Satu Langkah Lagi…</h2>
+    <p style="color:#f3d9e6; font-size:1rem; font-weight:700; text-shadow:0 1px 8px rgba(0,0,0,.5);">Tangkap semua kadonya! 🎁</p>
+  </div>
+</div>
 <p class="gift-count" id="gcount" style="display:none;">🎁 0 / 5</p>
 <p class="gift-done-note" id="gnote" style="display:none;"></p>
 
@@ -292,7 +297,7 @@ function startGifts(){
   caughtCount = 0;
   const arena = document.getElementById('arena');
   arena.style.display = 'block';
-  arena.innerHTML = '';
+  arena.querySelectorAll('.gift').forEach(g => g.remove());
   const gc = document.getElementById('gcount'), gn = document.getElementById('gnote');
   gc.style.display = 'block'; gn.style.display = 'block';
   gc.textContent = '🎁 0 / ' + GIFT_TOTAL; gn.textContent = '';
@@ -304,9 +309,9 @@ function startGifts(){
     const W = window.innerWidth, H = window.innerHeight;
     let x = 20 + Math.random()*(W-100);
     let y = 60 + Math.random()*(H-160);
-    const speed = (0.9 + Math.random()*0.7) * Math.min(W,700)/390;  // skala layar
-    let vx = (Math.random()*1.6+0.8) * (Math.random()<.5?-1:1) * speed;
-    let vy = (Math.random()*1.6+0.8) * (Math.random()<.5?-1:1) * speed;
+    const speed = (1.05 + Math.random()*0.75) * Math.min(W,700)/390;  // skala layar
+    let vx = (Math.random()*2.0+1.0) * (Math.random()<.5?-1:1) * speed;
+    let vy = (Math.random()*2.0+1.0) * (Math.random()<.5?-1:1) * speed;
     g.style.left = x+'px'; g.style.top = y+'px';
     g.addEventListener('click', () => catchGift(g), { once:false });
     arena.appendChild(g);
