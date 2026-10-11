@@ -90,7 +90,9 @@
   audio { display:none; }
 
   /* ---- slide tangkap kado ---- */
-  .gift-arena { position:fixed; inset:0; z-index:12; overflow:hidden; pointer-events:auto; }
+  .gift-arena { position:fixed; inset:0; z-index:30; overflow:hidden; pointer-events:auto;
+                background:linear-gradient(150deg,#2b1220,#4a1f38 45%,#7b3a5e); }
+  body.gift-mode .card { visibility:hidden; }
   .gift { position:absolute; font-size:2.1rem; cursor:pointer; user-select:none;
           padding:8px; line-height:1; will-change:transform; z-index:3; }
   .gift.pulse { animation:gpulse 1.2s ease-in-out infinite; }
@@ -172,7 +174,6 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
     <p class="msg"><b>Tangkap semua kadonya!</b> 🎁<br>
     <span style="font-size:.85rem; color:#8a6b7b;">Kado lari-lari di layar — kejar & ketuk!</span></p>
   </div>
-  <div class="gift-arena" id="arena" style="display:none;"></div>
 
   <!-- SLIDE 6 (terkunci/barcode) -->
   <div class="slide" id="s6">
@@ -187,6 +188,11 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
     <span class="dot on" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span>
     <span class="dot" id="d3"></span><span class="dot" id="d4"></span><span class="dot" id="d5"></span><span class="dot" id="d6"></span>
   </div>
+</div>
+
+<div class="gift-arena" id="arena" style="display:none;">
+  <p class="gift-count" id="gcount">🎁 0 / 5</p>
+  <p class="gift-done-note" id="gnote"></p>
 </div>
 
 
@@ -223,8 +229,8 @@ function go(n){ stopMusic(n);
   for(let i=0;i<=6;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
   if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
   window.scrollTo({top:0, behavior:'smooth'}); /* balik ke atas saat ganti slide */
-  if(n===5){ document.querySelector('.card').style.visibility='hidden'; startGifts(); }
-  else { document.querySelector('.card').style.visibility='visible'; }
+  if(n===5){ document.body.classList.add('gift-mode'); startGifts(); }
+  else { document.body.classList.remove('gift-mode'); }
   if(n===6){ confetti(); }
 }
 /* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
