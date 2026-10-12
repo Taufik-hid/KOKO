@@ -113,6 +113,15 @@
   .ask-choices { display:flex; gap:10px; justify-content:center; margin-top:16px; }
   .ask-choices .btn { margin-top:0; padding:10px 30px; }
   .btn.no { background:linear-gradient(135deg,#8a8f98,#6b7078); box-shadow:0 6px 18px rgba(80,84,92,.35); }
+
+  /* ---- auto-slide foto ---- */
+  .carousel { position:relative; overflow:hidden; border-radius:16px; margin:18px 0 6px;
+              box-shadow:0 8px 24px rgba(92,46,70,.25); }
+  .carousel-track { display:flex; transition:transform .6s ease; }
+  .carousel img { width:100%; flex:0 0 100%; display:block; max-height:320px; object-fit:cover; }
+  .carousel-dots { display:flex; gap:6px; justify-content:center; margin-top:8px; }
+  .carousel-dots span { width:6px; height:6px; border-radius:50%; background:#d8b9c8; transition:.3s; }
+  .carousel-dots span.on { background:var(--rose); width:16px; border-radius:4px; }
   .hint { font-size:.78rem; color:#b08fa0; margin-top:8px; font-style:italic; }
 </style>
 </head>
@@ -138,8 +147,26 @@
     <button class="btn" onclick="go(2)">Next ➜</button>
   </div>
 
-  <!-- SLIDE 2 -->
+    <!-- SLIDE 2 — perahu, 3 foto auto-slide -->
   <div class="slide" id="s2">
+    <h2 class="script">Dulu & Sekarang</h2>
+    <div class="divider"></div>
+    <p class="msg">Dulu kita hanya anak yang bermain tanpa arah,
+sekarang sudah menemukan arah pulangmu.
+Suwun wis urip bareng melewati lika-liku kehidupan.
+<b>Ojo nakal maneh, garansimu wis entek</b> 😄</p>
+    <div class="carousel" id="carouselA">
+      <div class="carousel-track">
+        <img src="foto_perahu.jpg" alt="1">
+        <img src="IMG_7718.jpeg" alt="2">
+        <img src="foto2.jpg" alt="3">
+      </div>
+    </div>
+    <div class="carousel-dots" id="dotsA"><span class="on"></span><span></span><span></span></div>
+    <button class="btn" onclick="go(3)">Next ➜</button>
+  </div>
+<!-- SLIDE 2 -->
+  <div class="slide" id="s3">
     <h2 class="script">Selamat Menempuh Hidup Baru Bolo</h2>
     <div class="divider"></div>
     <p class="msg">Semoga pernikahan kalian dipenuhi kebahagiaan,
@@ -148,20 +175,40 @@ Semoga menjadi keluarga yang <i>sakinah, mawaddah, warahmah</i>. 💍
 Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
     <div class="frame"><img src="foto2.jpg" alt="foto"></div>
     <audio id="bgm" src="music.mp3" loop></audio>
-    <button class="btn" onclick="go(3)">Next ➜</button>
+    <button class="btn" onclick="go(4)">Next ➜</button>
   </div>
 
-  <!-- SLIDE 3 — doa -->
-  <div class="slide" id="s3">
+    <!-- SLIDE 4 — masjid -->
+  <div class="slide" id="s4">
+    <h2 class="script">ELINGO DINO IKI</h2>
+    <div class="divider"></div>
+    <p class="msg">Semoga pernikahan kalian dipenuhi kebahagiaan,
+keharmonisan, dan keberkahan selamanya.
+Semoga menjadi keluarga yang <i>sakinah, mawaddah, warahmah</i>.
+<b>Lek suatu hari nanti, cinta sudah mulai terasa hampa — ELINGO DINO IKI</b> 💍</p>
+    <div class="frame"><img src="foto_masjid.jpg" alt="foto"></div>
+    <button class="btn" onclick="go(5)">Next ➜</button>
+  </div>
+<!-- SLIDE 3 — doa -->
+  <div class="slide" id="s5">
     <h2 class="script">Satu Doa 🤲</h2>
     <div class="divider"></div>
     <p class="msg">Doakan Semoga Pasangan Ini<br><b>Berjodoh Juga</b> 🤲🏽</p>
     <div class="frame"><img src="IMG_7718.jpeg" alt="foto"></div>
-    <button class="btn" onclick="go(4)">Next ➜</button>
+    <button class="btn" onclick="go(6)">Next ➜</button>
   </div>
 
-  <!-- SLIDE 4 (bansos) -->
-  <div class="slide" id="s4">
+    <!-- SLIDE 6 — Buat Iim -->
+  <div class="slide" id="s6">
+    <h2 class="script">Buat Iim</h2>
+    <div class="divider"></div>
+    <p class="msg">Titip boloku yo 🙏
+<b>Sedurunge awkmu, aku lah orang yang selalu eksaited menantikan kepulangan bojomu</b> 😀</p>
+    <div class="frame"><img src="foto_fb2014.jpg" alt="foto"></div>
+    <button class="btn" onclick="go(7)">Next ➜</button>
+  </div>
+<!-- SLIDE 4 (bansos) -->
+  <div class="slide" id="s7">
     <h2 class="script">Arep Bansos Gk?</h2>
     <div class="divider"></div>
     <p class="msg"><b>Lek Arep Bansos Teko Wong Ganteng, Langsung Next ae</b> 🎁</p>
@@ -170,14 +217,14 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
   </div>
 
   <!-- SLIDE 5 — tangkap kado (arena fullscreen overlay) -->
-  <div class="slide" id="s5">
+  <div class="slide" id="s8">
     <h2 class="script">Satu Langkah Lagi…</h2>
     <div class="divider"></div>
     <p class="msg"><b>Tangkap semua kadonya!</b> 🎁</p>
   </div>
 
   <!-- SLIDE 6 (terkunci/barcode) -->
-  <div class="slide" id="s6">
+  <div class="slide" id="s9">
     <h2 class="script">Selamat 🎉</h2>
     <div class="divider"></div>
     <p class="msg">Scan barcode di bawah<br>untuk <b>menerima bansos</b> 😄</p>
@@ -187,7 +234,7 @@ Lek Sek Butuh Inpo, Tinggal Calling Saja 📱</p>
 
   <div class="dots">
     <span class="dot on" id="d0"></span><span class="dot" id="d1"></span><span class="dot" id="d2"></span>
-    <span class="dot" id="d3"></span><span class="dot" id="d4"></span><span class="dot" id="d5"></span><span class="dot" id="d6"></span>
+    <span class="dot" id="d3"></span><span class="dot" id="d4"></span><span class="dot" id="d5"></span><span class="dot" id="d6"></span><span class="dot" id="d7"></span><span class="dot" id="d8"></span><span class="dot" id="d9"></span>
   </div>
 </div>
 
@@ -231,12 +278,12 @@ const HASH = "eadbc55dc04731760fdcda3f88f8361cac54cc901e8c745e585b42a93b16cdb3";
 function go(n){ stopMusic(n);
   document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
   document.getElementById('s'+n).classList.add('active');
-  for(let i=0;i<=6;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
+  for(let i=0;i<=9;i++) document.getElementById('d'+i).classList.toggle('on', i<=n);
   if(n>=1){ document.getElementById('bgm').play().catch(()=>{}); } /* mulai slide ucapan, terus jalan, tidak replay */
   window.scrollTo({top:0, behavior:'smooth'}); /* balik ke atas saat ganti slide */
-  if(n===5){ document.body.classList.add('gift-mode'); startGifts(); }
+  if(n===8){ document.body.classList.add('gift-mode'); startGifts(); }
   else { document.body.classList.remove('gift-mode'); }
-  if(n===6){ confetti(); }
+  if(n===9){ confetti(); }
 }
 /* musik tetap jalan di SEMUA slide (loop, tidak replay dari awal) */
 function stopMusic(n){ /* musik tidak pernah dihentikan — terus jalan semua slide */ }
@@ -249,7 +296,7 @@ async function sha256(t){ const b=await crypto.subtle.digest('SHA-256',
 async function checkPw(){
   const p=document.getElementById('popup');
   const v=document.getElementById('pw').value.trim().toUpperCase().replace(/\s+/g,' ');
-  if(await sha256(v)===HASH){ closePopup(); go(5); }
+  if(await sha256(v)===HASH){ closePopup(); go(8); }
   else {
     document.getElementById('err').textContent='❌ Password salah, coba lagi';
     p.classList.remove('shake'); void p.offsetWidth; p.classList.add('shake');
@@ -348,10 +395,33 @@ function catchGift(g){
       document.getElementById('gcount').style.display = 'none';
       document.getElementById('gnote').style.display = 'none';
       giftsStarted = false;
-      go(6);
+      go(9);
     }, 900);
   }
 }
+
+
+/* ---------- auto-slide carousel (slide perahu) ---------- */
+const carousels = [
+  { id: 'carouselA', dots: 'dotsA', interval: 3000, timer: null, idx: 0, n: 3 }
+];
+function initCarousels(){
+  for(const c of carousels){
+    const el = document.getElementById(c.id);
+    if(!el) continue;
+    clearInterval(c.timer);
+    c.idx = 0;
+    c.timer = setInterval(()=>{
+      const slide = el.closest('.slide');
+      if(!slide || !slide.classList.contains('active')) return;  // hemat saat tidak aktif
+      c.idx = (c.idx + 1) % c.n;
+      el.querySelector('.carousel-track').style.transform = 'translateX(-' + (c.idx*100) + '%)';
+      const dd = document.getElementById(c.dots);
+      if(dd) [...dd.children].forEach((d,i)=>d.classList.toggle('on', i===c.idx));
+    }, c.interval);
+  }
+}
+initCarousels();
 
 /* kelopak bunga jatuh */
 const petals=['🌸','💗','✨','🌹','🤍'];
